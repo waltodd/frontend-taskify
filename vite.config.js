@@ -8,4 +8,11 @@ export default defineConfig({
     global: "globalThis",
     "process.env": {},
   },
+  build: {
+    outDir: 'dist', // Make sure this matches the Vercel distDir if set
+  },
+  // Add the following line if necessary
+  server: {
+    historyApiFallback: true,
+  },
 });
