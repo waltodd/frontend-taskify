@@ -12,7 +12,7 @@ const CreateTask = () => {
     priority: "",
   });
   const dispatch = useDispatch();
-  
+
   const handleFormFieldChange = (fieldName, e) => {
     setForm({ ...form, [fieldName]: e.target.value });
   };
@@ -48,7 +48,7 @@ const CreateTask = () => {
             <CustomDropdown
               selectedValue={form.priority}
               onChange={(value) =>
-                setForm((prev) => ({ ...prev, priority: value }))
+                setForm((prev) => ({ ...prev, priority: value.value }))
               } // Update priority
             />
           </div>

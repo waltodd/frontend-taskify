@@ -6,8 +6,8 @@ const CustomDropdown = ({ selectedValue, onChange }) => {
     { label: "Alta", value: "alta" }];
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOptionClick = (value) => {
-    onChange(value); // Call the onChange handler with the selected value
+  const handleOptionClick = (option) => {
+    onChange(option); // Call the onChange handler with the selected value
     setIsOpen(false); // Close the dropdown
   };
 
