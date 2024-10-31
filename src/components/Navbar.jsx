@@ -9,7 +9,7 @@ const Navbar = () => {
   const navigate = useNavigate()
   const {  user } = useSelector((state) => state.auth);
 
-  const username = user.name
+ const username = user?.name 
   const handleLogout = () => {
     dispatch(signout());
     // localStorage.removeItem('token')

@@ -1,23 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { FormField, CustomButton } from "../components";
-
 import { Link } from "react-router-dom";
 import { logo, loader } from "../assets";
-
-
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { signIn, clearError } from '../store/features/auth/authSlice';
-
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { signIn, clearError } from "../store/features/auth/authSlice";
 
 const SignIn = () => {
   const [form, setForm] = useState({
-    email: '',
-    password: '',
-    
+    email: "",
+    password: "",
   });
 
-  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isLoading, error, user } = useSelector((state) => state.auth);
@@ -25,23 +19,21 @@ const SignIn = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/home');
+      navigate("/home");
     }
     return () => {
       dispatch(clearError());
     };
   }, [isAuthenticated, navigate, dispatch]);
 
-  
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(signIn({ email:form.email, password:form.password }));
-    navigate('/home');
+    dispatch(signIn({ email: form.email, password: form.password }));
+    navigate("/home");
   };
   const handleFormFieldChange = (fieldName, e) => {
-    setForm({ ...form, [fieldName]: e.target.value })
-  }
+    setForm({ ...form, [fieldName]: e.target.value });
+  };
   return (
     <main className="bg-[#FFFFFF] flex min-h-screen flex-col items-center justify-center ">
       <div className="flex flex-row justify-center items-center">
@@ -70,18 +62,17 @@ const SignIn = () => {
               placeholder="abc@taskify.ao"
               inputType="text"
               value={form.email}
-            handleChange={(e) => handleFormFieldChange('email', e)}
+              handleChange={(e) => handleFormFieldChange("email", e)}
             />
             <FormField
               labelName="Password *"
               placeholder="Password"
               inputType="password"
               value={form.password}
-            handleChange={(e) => handleFormFieldChange('password', e)}
+              handleChange={(e) => handleFormFieldChange("password", e)}
             />
           </div>
           {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
-
 
           <CustomButton
             btnType="button"

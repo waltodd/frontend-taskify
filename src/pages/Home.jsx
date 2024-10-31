@@ -4,10 +4,10 @@ import { plus,loader } from "../assets";
 import { useDispatch, useSelector } from 'react-redux';
 import  {TaskList}  from "../components";
 
-const Home = ({ title, isLoading, campaigns }) => {
+const Home = () => {
   const navigate = useNavigate();
   const {  user } = useSelector((state) => state.auth);
-  const username = user.name
+  const username = user?.name
   const handleNavigate = (campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
