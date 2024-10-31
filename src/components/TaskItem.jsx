@@ -32,7 +32,7 @@ const TaskItem = ({ task, onUpdate, onDelete, onComplete }) => {
   };
   return (
     <div
-      className={`flex items-start justify-start flex-col bg-[#F5F7F9] mb-4 p-2 h-full rounded-[20px] justify-between `}
+      className={`w-full flex items-start justify-start flex-col bg-[#F5F7F9] mb-4 p-2 h-full rounded-[20px] justify-between `}
     >
       <div className="flex flex-row w-full justify-between">
         <div className="flex flex-row  items-center px-2">

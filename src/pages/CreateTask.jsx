@@ -6,6 +6,8 @@ import { createTask } from "../store/features/task/taskSlice";
 import { add, back, loader } from "../assets";
 import { Link } from "react-router-dom";
 const CreateTask = () => {
+  const [showError, setShowError] = useState(false); // State to control the visibility of the error message
+
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -21,11 +23,19 @@ const CreateTask = () => {
   const username = user?.name;
 
   const handleCreateTask = (e) =>{
-    const {value} = form.priority 
-    console.log(value)
-    e.preventDefault();
-    dispatch(createTask({ title: form.title,priority: value , description: form.description }));
-    navigate("/home");
+    if(!form.title || !form.description || !form.priority){
+      setShowError(true); // Show error messages
+      setTimeout(() => {
+        setShowError(false); // Hide error messages after 3 seconds
+      }, 3000);
+    }else {
+      const {value} = form.priority 
+      console.log(value)
+      e.preventDefault();
+      dispatch(createTask({ title: form.title,priority: value , description: form.description }));
+      navigate("/home");
+    }
+    
   }
 
 
@@ -51,6 +61,9 @@ const CreateTask = () => {
         Criar Tarefa
       </h1>
       <div className=" p-6   mt-5 flex flex-col ">
+        {showError && (
+           <span className="text-white my-2 rounded-[12px] bg-[#fe5f55] p-4 w-96">Todos os campos obrigatórios</span>
+        )}
         <div className="flex flex-col gap-[10px]">
           <div className="mb-2">
             <FormField
