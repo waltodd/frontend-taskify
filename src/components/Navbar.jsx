@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <div className="flex flex-row px-6 justify-between items-center max-w-[1280px] mx-auto ">
       <div className="flex flex-row justify-center items-center gap-4">
-        <div className="w-[52px] h-[52px] rounded-full  flex justify-center items-center cursor-pointer">
+        <Link to="/home" className="w-[52px] h-[52px] rounded-full  flex justify-center items-center cursor-pointer">
           <img
             src={logo}
             alt="user"
@@ -28,7 +28,7 @@ const Navbar = () => {
           <h1 className="font-epilogue font-bold pl-2 text-[18px] text-[#3F3D56] text-left">
             Taskify
           </h1>
-        </div>
+        </Link>
       </div>
       <div className="flex flex-row justify-center items-center gap-4">
         <h1 className="font-epilogue font-semibold  text-[18px] text-[#3F3D56] text-left">

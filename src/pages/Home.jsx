@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { plus,loader } from "../assets";
-import { useDispatch, useSelector } from 'react-redux';
-import  {TaskList}  from "../components";
+import { add, loader } from "../assets";
+import { useDispatch, useSelector } from "react-redux";
+import { TaskList } from "../components";
+import { Link } from "react-router-dom";
+import { FormField, CustomButton, TaskModal } from "../components";
 
 const Home = () => {
   const navigate = useNavigate();
-  const {  user } = useSelector((state) => state.auth);
-  const username = user?.name
+  const { user } = useSelector((state) => state.auth);
+  const username = user?.name;
+
+ 
+
+
   const handleNavigate = (campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
 
   return (
     <div className="flex flex-col mt-8">
-      <h1 className="font-epilogue font-bold text-[28px] text-black text-left">
+      <h1 className="font-epilogue font-bold text-[28px] text-[#3F3D56] text-left">
         Bem-vindo, <span className="text-[#1dc071]">{username}.</span>
       </h1>
 
@@ -24,20 +30,22 @@ const Home = () => {
         </p>
       </div>
       <div className="py-4">
-        <div className="lg:flex-1 flex flex-row max-w-[458px] justify-center items-center py-2 pl-2 pr-2 h-[52px] bg-[#F5F7F9] rounded-[100px]">
+        <Link to='/create-task'
+          className="lg:flex-1 flex flex-row max-w-[150px] justify-between items-center cursor-pointer items-center p-2 h-[52px] bg-[#1dc071]  rounded-[12px]"
+          
+        >
           <img
-            src={plus}
+            src={add}
             alt="add"
-            className="w-[28px] h-[28px] object-contain"
+            className="w-[20px]  h-[20px] object-contain"
           />
 
-          <input
-            type="text"
-            placeholder="Adicionar uma nova tarefa..."
-            className="flex w-full font-epilogue font-semibold pl-2 text-[18px] placeholder:text-[#8D9CB8] text-[3F3D56] bg-transparent outline-none"
-          />
-        </div>
+          <p className="font-epilogue font-semibold text-[18px] leading-[30px] text-[#ffffff]">
+            Criar tarefa
+          </p>
+        </Link>
       </div>
+    
       <div className="mt-4">
         <TaskList />
       </div>

@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
+
+const apiBaseUrl = "https://backend-taskify-ecru.vercel.app"
+
 const initialState = {
   tasks: [],
   isLoading: false,
@@ -11,7 +14,7 @@ export const fetchTasks = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState()
-      const response = await fetch('/api/tasks', {
+      const response = await fetch(`${apiBaseUrl}/api/v1/tasks`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
@@ -30,7 +33,7 @@ export const createTask = createAsyncThunk(
   async (taskData, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState()
-      const response = await fetch('/api/tasks', {
+      const response = await fetch('/api/v1/tasks', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +55,7 @@ export const updateTask = createAsyncThunk(
   async ({ id, ...updateData }, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState()
-      const response = await fetch(`/api/tasks/${id}`, {
+      const response = await fetch(`/api/v1/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +77,7 @@ export const deleteTask = createAsyncThunk(
   async (id, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState()
-      const response = await fetch(`/api/tasks/${id}`, {
+      const response = await fetch(`/api/v1/tasks/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${auth.token}`,
@@ -93,7 +96,7 @@ export const completeTask = createAsyncThunk(
   async (id, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState()
-      const response = await fetch(`/api/tasks/${id}/complete`, {
+      const response = await fetch(`/api/v1/tasks/${id}/complete`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${auth.token}`,
@@ -113,7 +116,7 @@ export const filterTasksByPriority = createAsyncThunk(
   async (priority, { getState, rejectWithValue }) => {
     try {
       const { auth } = getState()
-      const response = await fetch(`/api/tasks/filter?priority=${priority}`, {
+      const response = await fetch(`/api/v1/tasks/filter?priority=${priority}`, {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },

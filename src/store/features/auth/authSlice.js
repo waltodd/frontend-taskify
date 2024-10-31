@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-const baseURL = "https://backend-taskify-ecru.vercel.app"
+const apiBaseUrl = "https://backend-taskify-ecru.vercel.app"
 
 const initialState = {
   user: null,
@@ -14,7 +14,7 @@ export const signIn = createAsyncThunk(
   'auth/signIn',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${baseURL}/api/v1/users/sign-in`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/users/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
@@ -33,7 +33,7 @@ export const signUp = createAsyncThunk(
   'auth/signUp',
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch(`${baseURL}/api/v1/users/sign-up`, {
+      const response = await fetch(`${apiBaseUrl}/api/v1/users/sign-up`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),

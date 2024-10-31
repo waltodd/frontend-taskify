@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Routes,Navigate } from "react-router-dom";
 
 import { Navbar } from "./components";
-import { Home, SignIn, SignUp } from "./pages";
+import { Home, SignIn, SignUp,CreateTask } from "./pages";
 import ProtectedRoute from "./pages/ProtectedRoute";
 
 const App = () => {
@@ -22,6 +22,16 @@ const App = () => {
               <ProtectedRoute>
                 <Navbar />
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-task"
+            element={
+              <ProtectedRoute>
+                <Navbar />
+
+                <CreateTask path="/create-task"/>
               </ProtectedRoute>
             }
           />
