@@ -1,13 +1,23 @@
 import React from "react";
 import { check, edit, trash } from "../assets";
+import { deleteTask } from "../store/features/task/taskSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const TaskItem = ({ task, onUpdate, onDelete, onComplete }) => {
+  const dispatch = useDispatch();
   const handleToggleCompleted = () => {
     if (!task.completed) {
       onComplete();
     }
   };
-
+  const navigate = useNavigate();
+  const handleDeletedTask = (id) => {
+    onDelete(id);
+  };
+  const handleEdit = (taskId) => {
+    navigate(`/edit-task/${taskId}`);
+  };
   const priorityColor = (priority) => {
     switch (priority) {
       case "alta":
@@ -15,7 +25,7 @@ const TaskItem = ({ task, onUpdate, onDelete, onComplete }) => {
       case "media":
         return "bg-[#edb54e]"; // Yellow for medium priority
       case "baixa":
-        return "bg-[#4ca64c]"; // Green for low priority
+        return "bg-[#1dc071]"; // Green for low priority
       default:
         return ""; // Default color for undefined priority
     }
@@ -47,34 +57,43 @@ const TaskItem = ({ task, onUpdate, onDelete, onComplete }) => {
           >
             {task.title}
           </span>
-          <span className={`text-[#FFFFFF] px-2 rounded-md font-epilogue ${priorityColor(task.priority)}`}>{task.priority}</span> 
+          <span
+            className={`text-[#FFFFFF] px-2 rounded-md font-epilogue ${priorityColor(
+              task.priority
+            )}`}
+          >
+            {task.priority}
+          </span>
         </div>
 
         <div className="flex flex-row justify-center items-center">
           <div
-            className={`w-[24px] h-[24px] cursor-pointer flex justify-center items-center`}
+            className={`w-[24px] h-[24px] hover:-translate-y-1 hover:scale-110  mr-3 cursor-pointer flex justify-center items-center`}
+            onClick={() => handleEdit(task._id)}
           >
             <img
               src={edit}
               alt="user"
-              className="w-5 h-5 rounded-lg object-contain"
+              className="w-6 h-6 rounded-lg object-contain"
             />
           </div>
           <div
-            className={`w-[24px] h-[24px] cursor-pointer flex justify-center items-center 
+            className={`w-[24px] hover:-translate-y-1 hover:scale-110  h-[24px] cursor-pointer flex justify-center items-center 
            `}
-            onClick={handleToggleCompleted}
+            onClick={() => handleDeletedTask(task._id)}
           >
             <img
               src={trash}
               alt="user"
-              className="w-4 h-4 rounded-lg object-contain"
+              className="w-5 h-5 rounded-lg object-contain "
             />
           </div>
         </div>
       </div>
       <div className="">
-        <p className="font-epilogue   px-[50px] text-[#8D9CB8]">{task.description}</p>
+        <p className="font-epilogue   px-[50px] text-[#8D9CB8]">
+          {task.description}
+        </p>
       </div>
     </div>
   );

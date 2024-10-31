@@ -28,6 +28,26 @@ export const fetchTasks = createAsyncThunk(
   }
 );
 
+export const fetchTaskById = createAsyncThunk(
+  "tasks/fetchTaskById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiBaseUrl}/api/v1/tasks/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": `${token}`,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch task");
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const createTask = createAsyncThunk(
   "tasks/createTask",
   async (taskData, { getState, rejectWithValue }) => {
@@ -55,12 +75,12 @@ export const updateTask = createAsyncThunk(
   "tasks/updateTask",
   async ({ id, ...updateData }, { getState, rejectWithValue }) => {
     try {
-      const { auth } = getState();
+      const token = localStorage.getItem("token");
       const response = await fetch(`${apiBaseUrl}/api/v1/tasks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.token}`,
+          "x-access-token": `${token}`,
         },
         body: JSON.stringify(updateData),
       });
@@ -77,11 +97,12 @@ export const deleteTask = createAsyncThunk(
   "tasks/deleteTask",
   async (id, { getState, rejectWithValue }) => {
     try {
-      const { auth } = getState();
+      const token = localStorage.getItem("token");
       const response = await fetch(`${apiBaseUrl}/api/v1/tasks/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${auth.token}`,
+          "Content-Type": "application/json",
+          "x-access-token": `${token}`,
         },
       });
       if (!response.ok) throw new Error("Failed to delete task");
@@ -181,13 +202,30 @@ const taskSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       })
+      .addCase(fetchTaskById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchTaskById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // Here you can decide how to store the fetched task,
+        // For example, you might want to store it in a separate variable or update a specific task in the tasks array.
+        const index = state.tasks.findIndex((task) => task._id === action.payload._id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload; // Update the existing task
+        } else {
+          state.tasks.push(action.payload); // If it's a new task, add it
+        }
+      })
+      .addCase(fetchTaskById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
       .addCase(createTask.fulfilled, (state, action) => {
         state.tasks.push(action.payload);
       })
       .addCase(updateTask.fulfilled, (state, action) => {
-        const index = state.tasks.findIndex(
-          (task) => task._id === action.payload._id
-        );
+        const index = state.tasks.findIndex((task) => task._id === action.payload._id);
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
@@ -196,9 +234,7 @@ const taskSlice = createSlice({
         state.tasks = state.tasks.filter((task) => task._id !== action.payload);
       })
       .addCase(completeTask.fulfilled, (state, action) => {
-        const index = state.tasks.findIndex(
-          (task) => task._id === action.payload._id
-        );
+        const index = state.tasks.findIndex((task) => task._id === action.payload._id);
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
@@ -217,6 +253,7 @@ const taskSlice = createSlice({
         }
       );
   },
+  
 });
 
 export const { clearTaskError } = taskSlice.actions;

@@ -1,32 +1,31 @@
-import React, { useEffect } from "react";
-import {
-  signIn,
-  getUserTasks,
-  getCurrentUser,
-} from "../store/features/auth/authSlice";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getUserTasks, getCurrentUser } from "../store/features/auth/authSlice";
 import TaskItem from "./TaskItem";
-import { add, loader, noresults } from "../assets";
-import { Link } from "react-router-dom";
+import { loader, noresults } from "../assets";
+import { deleteTask } from "../store/features/task/taskSlice";
 
 const TaskList = () => {
-  //   const tasks = useSelector((state) => state.tasks.tasks);
-  //   const dispatch = useDispatch();
-
-  const { user, tasks, isAuthenticated, isLoading, error } = useSelector(
+  const dispatch = useDispatch();
+  const { tasks, isAuthenticated, isLoading, error } = useSelector(
     (state) => state.auth
   );
+  const [initialLoading, setInitialLoading] = useState(true);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(getCurrentUser());
-      dispatch(getUserTasks()); // Fetch tasks after the user is authenticated
+      dispatch(getUserTasks())
+        .finally(() => setInitialLoading(false)); // Set initial loading to false after the first load
     }
   }, [isAuthenticated, dispatch]);
-  // Filter tasks that belong to the current user
 
-  if (isLoading)
+  const handleDelete = (id) => {
+    dispatch(deleteTask(id));
+  };
+
+  // Only show loader during initial load
+  if (initialLoading) {
     return (
       <div className="w-full flex flex-col justify-center items-center max-w-[1280px] mx-auto">
         <img
@@ -35,40 +34,57 @@ const TaskList = () => {
           className="w-[100px] h-[100px] object-contain"
         />
         <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left">
-          Carrengando
+          Carregando...
         </p>
-        ;
       </div>
     );
+  }
+
+  // Error state
   if (error) {
     return <p>Error: {error}</p>;
   }
 
-  // Safeguard against undefined tasks
-  if (!Array.isArray(tasks) || tasks.length === 0) {
-    return (
-      <div className="w-full flex flex-col justify-center items-center max-w-[1280px] mx-auto">
-        <img
-          src={noresults}
-          alt="loader"
-          className="w-[100px] h-[100px] object-contain pb-4"
-        />
-        <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left pb-1">
-          Nenhuma tarefa encontrada.
-        </p>
-        ;
-      </div>
-    );
-  }
+  // // Display empty state if tasks array is empty after initial load
+  // if (!tasks || tasks.length === 0) {
+  //   return (
+  //     <div className="w-full flex flex-col justify-center items-center max-w-[1280px] mx-auto">
+  //       <img
+  //         src={noresults}
+  //         alt="no results"
+  //         className="w-[100px] h-[100px] object-contain pb-4"
+  //       />
+  //       <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left pb-1">
+  //         Nenhuma tarefa encontrada.
+  //       </p>
+  //     </div>
+  //   );
+  // }
+
+  // Render tasks if they exist
   return (
-    <div>
-      {tasks.map((task) => (
-        <TaskItem
-          key={task._id} // Use task._id as key
-          task={task}
-          onComplete={() => dispatch(markAsCompleted(task.id))}
-        />
-      ))}
+    <div className="w-full flex flex-col items-center max-w-[1280px] mx-auto">
+      {tasks && tasks.length > 0 ? (
+        tasks.map((task) => (
+          <TaskItem
+            key={task._id}
+            task={task}
+            onComplete={() => dispatch(markAsCompleted(task._id))}
+            onDelete={handleDelete}
+          />
+        ))
+      ) : (
+        <div className="flex flex-col items-center">
+          <img
+            src={noresults}
+            alt="no results"
+            className="w-[100px] h-[100px] object-contain pb-4"
+          />
+          <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left pb-1">
+            Nenhuma tarefa encontrada.
+          </p>
+        </div>
+      )}
     </div>
   );
 };

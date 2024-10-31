@@ -9,8 +9,9 @@ import add from "./Pluscolor.svg";
 import edit from "./edit.png";
 import trash from "./trash.png";
 import noresults from "./noresults.svg";
+import back from "./turn-back.png";
 
 
 
 
-export { noresults,logo,add,check,trash,edit, logout, profile, search, plus, loader };
+export { back,noresults,logo,add,check,trash,edit, logout, profile, search, plus, loader };
