@@ -8,8 +8,10 @@ const initialState = {
   isLoading: false,
   error: null,
   isAuthenticated: !!localStorage.getItem('token'),
+  tasks: [], // Store user tasks here
 }
 
+// Sign In
 export const signIn = createAsyncThunk(
   'auth/signIn',
   async (credentials, { rejectWithValue }) => {
@@ -29,6 +31,7 @@ export const signIn = createAsyncThunk(
   }
 )
 
+// Sign Up
 export const signUp = createAsyncThunk(
   'auth/signUp',
   async (userData, { rejectWithValue }) => {
@@ -47,14 +50,39 @@ export const signUp = createAsyncThunk(
   }
 )
 
+// Get Current User
 export const getCurrentUser = createAsyncThunk(
   'auth/getCurrentUser',
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { auth } = getState()
-      const response = await fetch(`${baseURL}/api/v1/users/current-user`, {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiBaseUrl}/api/v1/users/me`, {
         headers: {
-          Authorization: `Bearer ${auth.token}`,
+          "Content-Type": "application/json",
+          "x-access-token": `${token}`,
+        },
+      })
+      const data = await response.json()
+      
+      if (!response.ok) throw new Error(data.message)
+      // Return only tasks
+      return data.tasks;
+    } catch (error) {
+      return rejectWithValue(error.message)
+    }
+  }
+)
+
+// Get User Tasks
+export const getUserTasks = createAsyncThunk(
+  'auth/getUserTasks',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${apiBaseUrl}/api/v1/tasks`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": `${token}`,
         },
       })
       const data = await response.json()
@@ -75,6 +103,7 @@ const authSlice = createSlice({
       state.token = null
       state.error = null
       state.isAuthenticated = false
+      state.tasks = [] // Clear tasks on signout
       localStorage.removeItem('token')
     },
     clearError: (state) => {
@@ -118,13 +147,27 @@ const authSlice = createSlice({
       })
       .addCase(getCurrentUser.fulfilled, (state, action) => {
         state.isLoading = false
-        state.user = action.payload.user
+        state.tasks = action.payload
         state.isAuthenticated = true
       })
       .addCase(getCurrentUser.rejected, (state, action) => {
         state.isLoading = false
         state.error = action.payload
+        
         state.isAuthenticated = false
+      })
+      // Get User Tasks
+      .addCase(getUserTasks.pending, (state) => {
+        state.isLoading = true
+        state.error = null
+      })
+      .addCase(getUserTasks.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.tasks = action.payload.tasks // Populate tasks array
+      })
+      .addCase(getUserTasks.rejected, (state, action) => {
+        state.isLoading = false
+        state.error = action.payload
       })
   },
 })

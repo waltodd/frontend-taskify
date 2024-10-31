@@ -12,10 +12,11 @@ export const fetchTasks = createAsyncThunk(
   "tasks/fetchTasks",
   async (_, { getState, rejectWithValue }) => {
     try {
-      const { auth } = getState();
+      const token = localStorage.getItem("token");
       const response = await fetch(`${apiBaseUrl}/api/v1/tasks`, {
         headers: {
-          Authorization: `Bearer ${auth.token}`,
+          "Content-Type": "application/json",
+          "x-access-token": `${token}`,
         },
       });
       if (!response.ok) throw new Error("Failed to fetch tasks");
@@ -32,7 +33,7 @@ export const createTask = createAsyncThunk(
   async (taskData, { getState, rejectWithValue }) => {
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
+
       const response = await fetch(`${apiBaseUrl}/api/v1/tasks`, {
         method: "POST",
         headers: {

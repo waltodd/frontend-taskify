@@ -8,6 +8,9 @@ import check from "./check.svg";
 import add from "./Pluscolor.svg";
 import edit from "./edit.png";
 import trash from "./trash.png";
+import noresults from "./noresults.svg";
 
 
-export { logo,add,check,trash,edit, logout, profile, search, plus, loader };
+
+
+export { noresults,logo,add,check,trash,edit, logout, profile, search, plus, loader };

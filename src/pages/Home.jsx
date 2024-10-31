@@ -8,10 +8,12 @@ import { FormField, CustomButton, TaskModal } from "../components";
 
 const Home = () => {
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
-  const username = user?.name;
 
- 
+  
+  const { tasks, isAuthenticated, isLoading, error,user } = useSelector(
+    (state) => state.auth
+  );
+  const username = user?.name;
 
 
   const handleNavigate = (campaign) => {
@@ -26,7 +28,7 @@ const Home = () => {
 
       <div className="flex flex-wrap mt-[20px] gap-[26px]">
         <p className="font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183]">
-          Tem 7 tarefas para fazer.
+          Tem <strong className="font-epilogue font-bold text-[16px] text-[#1dc071]">{tasks?.length || '0'}</strong> tarefas para fazer.
         </p>
       </div>
       <div className="py-4">
