@@ -30,7 +30,7 @@ const SignIn = () => {
     return () => {
       dispatch(clearError());
     };
-  }, [user, navigate, dispatch]);
+  }, [isAuthenticated, navigate, dispatch]);
 
   
 
@@ -38,7 +38,6 @@ const SignIn = () => {
     e.preventDefault();
     dispatch(signIn({ email:form.email, password:form.password }));
     navigate('/home');
-    alert()
   };
   const handleFormFieldChange = (fieldName, e) => {
     setForm({ ...form, [fieldName]: e.target.value })

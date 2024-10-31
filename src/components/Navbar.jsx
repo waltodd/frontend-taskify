@@ -1,9 +1,21 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
+import { signout } from '../store/features/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import { logo, logout, profile } from "../assets";
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const {  user } = useSelector((state) => state.auth);
+
+  const username = user.name
+  const handleLogout = () => {
+    dispatch(signout());
+    // localStorage.removeItem('token')
+    navigate('/sign-in');
+
+  }
   return (
     <div className="flex flex-row px-6 justify-between items-center max-w-[1280px] mx-auto ">
       <div className="flex flex-row justify-center items-center gap-4">
@@ -20,20 +32,22 @@ const Navbar = () => {
       </div>
       <div className="flex flex-row justify-center items-center gap-4">
         <h1 className="font-epilogue font-semibold  text-[18px] text-[#3F3D56] text-left">
-          User
+          {username}
         </h1>
         <div className="w-[45px] h-[45px] rounded-full bg-[#F5F7F9] flex justify-center items-center cursor-pointer">
           <img
             src={profile}
             alt="user"
-            className="w-[90%] h-[90%] rounded-full object-contain"
+            className="w-[60%] h-[60%] rounded-full object-contain"
           />
         </div>
-        <div className="w-[42px] h-[42px] rounded-full bg-[#F5F7F9] flex justify-center items-center cursor-pointer">
+        <div className="w-[42px] h-[42px] rounded-full flex justify-center items-center cursor-pointer"
+        onClick={handleLogout}
+        >
           <img
             src={logout}
             alt="user"
-            className="w-[60%] h-[60%] object-contain"
+            className="w-[50%] h-[50%] object-contain"
           />
         </div>
       </div>

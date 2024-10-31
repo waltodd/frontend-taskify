@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { plus,loader } from "../assets";
-
+import { useDispatch, useSelector } from 'react-redux';
 import  {TaskList}  from "../components";
 
 const Home = ({ title, isLoading, campaigns }) => {
   const navigate = useNavigate();
-
+  const {  user } = useSelector((state) => state.auth);
+  const username = user.name
   const handleNavigate = (campaign) => {
     navigate(`/campaign-details/${campaign.title}`, { state: campaign });
   };
@@ -14,7 +15,7 @@ const Home = ({ title, isLoading, campaigns }) => {
   return (
     <div className="flex flex-col mt-8">
       <h1 className="font-epilogue font-bold text-[28px] text-black text-left">
-        Bem-vindo, <span className="text-[#1dc071]">João.</span>
+        Bem-vindo, <span className="text-[#1dc071]">{username}.</span>
       </h1>
 
       <div className="flex flex-wrap mt-[20px] gap-[26px]">

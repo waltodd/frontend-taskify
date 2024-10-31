@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import logout from "./logout.svg";
-import profile from "./profile.jpeg";
+import profile from "./profile.svg";
 import search from "./search.svg";
 import plus from "./Plus.svg";
 import loader from "./loader.svg";
