@@ -22,7 +22,7 @@ const Navbar = () => {
         <h1 className="font-epilogue font-semibold  text-[18px] text-[#3F3D56] text-left">
           User
         </h1>
-        <div className="w-[52px] h-[52px] rounded-full bg-[#F5F7F9] flex justify-center items-center cursor-pointer">
+        <div className="w-[45px] h-[45px] rounded-full bg-[#F5F7F9] flex justify-center items-center cursor-pointer">
           <img
             src={profile}
             alt="user"
