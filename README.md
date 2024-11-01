@@ -1,37 +1,31 @@
-## Getting Started
+# "Taskify". A aplicação deve permitir que os usuários criem, visualizem, atualizem e removam tarefas. Além disso, deve ser possível atribuir uma prioridade às tarefas e marcá-las como concluídas.
 
-Create a project using this example:
+![Taskify](https://utfs.io/f/ZeXSco38bUsFlyBkm0TVnyvHz3OsYXb1w0WjiZqaP4hx9JBo)
 
-```bash
-npx thirdweb create --template vite-javascript-starter
+## Install
+
+- After opening the files in Visual Studio Code, open the **VS Code** integrated terminal and run the following commands:
+
+```
+npm install
 ```
 
-You can start editing the page by modifying `src/main.jsx`. The page auto-updates as you edit the file.
+This will install all the packages and dependencies used in the project.
 
-On `src/index.jsx`, you'll find our `ThirdwebProvider` wrapping your app,
-this is necessary for our [hooks](https://portal.thirdweb.com/react) and
-[UI Components](https://portal.thirdweb.com/ui-components) to work.
+## Usage
 
-### Deploy to IPFS
+- Run the following command to start a local server:
 
-Deploy a copy of your application to IPFS using the following command:
-
-```bash
-yarn deploy
+```
+npm run dev
 ```
 
-## Learn More
+This will open up the project on a browser on `http://localhost:5173/`
 
-To learn more about thirdweb, Vite and React, take a look at the following resources:
+## Build
 
-- [thirdweb React Documentation](https://docs.thirdweb.com/react) - learn about our React SDK.
-- [thirdweb JavaScript Documentation](https://docs.thirdweb.com/react) - learn about our JavaScript/TypeScript SDK.
-- [thirdweb Portal](https://docs.thirdweb.com/react) - check our guides and development resources.
-- [Vite Documentation](https://vitejs.dev/guide/) - learn about Vite features.
-- [React documentation](https://reactjs.org/) - learn React.
+- To create a production build:
 
-You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
-
-## Join our Discord!
-
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
+```
+npm run build
+```
