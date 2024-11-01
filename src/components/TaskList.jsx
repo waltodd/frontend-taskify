@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserTasks, getCurrentUser } from "../store/features/auth/authSlice";
 import TaskItem from "./TaskItem";
 import { loader, noresults } from "../assets";
-import { deleteTask,  } from "../store/features/task/taskSlice";
+import { deleteTask, markTaskAsCompleted } from "../store/features/task/taskSlice";
 
 const TaskList = ({ showCompleted }) => {
   const options = [
@@ -120,7 +120,7 @@ const TaskList = ({ showCompleted }) => {
           <TaskItem
             key={task._id}
             task={task}
-            onComplete={() => dispatch(markAsCompleted(task._id))}
+            onComplete={() => dispatch(markTaskAsCompleted(task._id))}
             onDelete={handleDelete}
           />
         ))

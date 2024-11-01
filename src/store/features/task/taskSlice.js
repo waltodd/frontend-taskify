@@ -113,65 +113,23 @@ export const deleteTask = createAsyncThunk(
   }
 );
 
-export const completeTask = createAsyncThunk(
-  "tasks/completeTask",
-  async (id, { getState, rejectWithValue }) => {
+// Async thunk for marking a task as completed
+export const markTaskAsCompleted = createAsyncThunk(
+  "tasks/markAsCompleted",
+  async (id, {  rejectWithValue }) => {
+    const token = localStorage.getItem("token");
     try {
-      const { auth } = getState();
       const response = await fetch(
         `${apiBaseUrl}/api/v1/tasks/${id}/complete`,
         {
-          method: "PUT",
+          method: "PATCH",
           headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to complete task");
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const filterTasksByPriority = createAsyncThunk(
-  "tasks/filterByPriority",
-  async (priority, { getState, rejectWithValue }) => {
-    try {
-      const { auth } = getState();
-      const response = await fetch(
-        `${apiBaseUrl}/api/v1/tasks/filter?priority=${priority}`,
-        {
-          headers: {
-            Authorization: `Bearer ${auth.token}`,
-          },
-        }
-      );
-      if (!response.ok) throw new Error("Failed to filter tasks by priority");
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const filterTasksByStatus = createAsyncThunk(
-  "tasks/filterByStatus",
-  async (completed, { getState, rejectWithValue }) => {
-    try {
-      const response = await fetch(
-        `${apiBaseUrl}/api/tasks/filter?completed=${completed}`,
-        {
-          headers: {
-            "Content-Type": `application/json`,
+            "Content-Type": "application/json",
             "x-access-token": `${token}`,
           },
         }
       );
-      if (!response.ok) throw new Error("Failed to filter tasks by status");
+      if (!response.ok) throw new Error("Falha ao concluir a tarefa");
       const data = await response.json();
       return data;
     } catch (error) {
@@ -179,7 +137,6 @@ export const filterTasksByStatus = createAsyncThunk(
     }
   }
 );
-
 const taskSlice = createSlice({
   name: "tasks",
   initialState,
@@ -210,7 +167,9 @@ const taskSlice = createSlice({
         state.isLoading = false;
         // Here you can decide how to store the fetched task,
         // For example, you might want to store it in a separate variable or update a specific task in the tasks array.
-        const index = state.tasks.findIndex((task) => task._id === action.payload._id);
+        const index = state.tasks.findIndex(
+          (task) => task._id === action.payload._id
+        );
         if (index !== -1) {
           state.tasks[index] = action.payload; // Update the existing task
         } else {
@@ -225,7 +184,9 @@ const taskSlice = createSlice({
         state.tasks.push(action.payload);
       })
       .addCase(updateTask.fulfilled, (state, action) => {
-        const index = state.tasks.findIndex((task) => task._id === action.payload._id);
+        const index = state.tasks.findIndex(
+          (task) => task._id === action.payload._id
+        );
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
@@ -233,17 +194,13 @@ const taskSlice = createSlice({
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter((task) => task._id !== action.payload);
       })
-      .addCase(completeTask.fulfilled, (state, action) => {
-        const index = state.tasks.findIndex((task) => task._id === action.payload._id);
+      .addCase(markTaskAsCompleted.fulfilled, (state, action) => {
+        const index = state.tasks.findIndex(
+          (task) => task._id === action.payload._id
+        );
         if (index !== -1) {
-          state.tasks[index] = action.payload;
+          state.tasks[index] = action.payload; // Update the task in the state
         }
-      })
-      .addCase(filterTasksByPriority.fulfilled, (state, action) => {
-        state.tasks = action.payload;
-      })
-      .addCase(filterTasksByStatus.fulfilled, (state, action) => {
-        state.tasks = action.payload;
       })
       .addMatcher(
         (action) => action.type.endsWith("/rejected"),
@@ -252,8 +209,8 @@ const taskSlice = createSlice({
           state.error = action.payload;
         }
       );
+      
   },
-  
 });
 
 export const { clearTaskError } = taskSlice.actions;

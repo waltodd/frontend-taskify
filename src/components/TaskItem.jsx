@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 
 const TaskItem = ({ task, onUpdate, onDelete, onComplete }) => {
   const dispatch = useDispatch();
-  const handleToggleCompleted = () => {
+  const handleToggleCompleted = (task) => {
+ 
     if (!task.completed) {
-      onComplete();
+     
+      onComplete(task._id);
     }
   };
   const navigate = useNavigate();
@@ -40,7 +42,7 @@ const TaskItem = ({ task, onUpdate, onDelete, onComplete }) => {
             className={`w-[24px] h-[24px] min-w-[24px] min-h-[24px] max-w-[24px] max-h-[24px] cursor-pointer flex justify-center items-center rounded-md border-[#C6CFDC] border-[2px] ${
               task.completed ? "bg-[#1dc071] border-none" : ""
             }`}
-            onClick={handleToggleCompleted}
+            onClick={()=>handleToggleCompleted(task)}
           >
             {task.completed && (
               <img
