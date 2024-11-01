@@ -25,7 +25,7 @@ const CustomDropdown = ({ selectedValue, onChange, title }) => {
           {options.map((option) => (
             <div
               key={option.value}
-              className="p-2 text-[#3F3D56] hover:bg-[#1dc071] text-white cursor-pointer"
+              className="p-2 text-[#3F3D56] hover:bg-[#1dc071] text-[#3F3D56] cursor-pointer"
               onClick={() => handleOptionClick(option)} // Select option
             >
               {option.label}

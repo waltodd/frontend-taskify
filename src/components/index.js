@@ -7,3 +7,6 @@ export { default as TaskList } from "./TaskList";
 export { default as TaskModal } from "./TaskModal";
 export { default as CustomDropdown } from "./CustomDropdown";
 export { default as Footer } from "./Footer";
+export { default as Tabs } from "./Tabs";
+
+

@@ -4,7 +4,7 @@ import { add, loader } from "../assets";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskList } from "../components";
 import { Link } from "react-router-dom";
-import { FormField, CustomButton, CustomDropdown } from "../components";
+import { FormField,Tabs, CustomButton, CustomDropdown } from "../components";
 import {
   signIn,
   getUserTasks,
@@ -77,7 +77,8 @@ const Home = () => {
       </div>
 
       <div className="mt-4">
-        <TaskList />
+        {/* <TaskList /> */}
+        <Tabs />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import TaskItem from "./TaskItem";
 import { loader, noresults } from "../assets";
 import { deleteTask } from "../store/features/task/taskSlice";
 
-const TaskList = () => {
+const TaskList = ({ showCompleted }) => {
   const dispatch = useDispatch();
   const { tasks, isAuthenticated, isLoading, error } = useSelector(
     (state) => state.auth
@@ -15,8 +15,7 @@ const TaskList = () => {
   useEffect(() => {
     if (isAuthenticated) {
       dispatch(getCurrentUser());
-      dispatch(getUserTasks())
-        .finally(() => setInitialLoading(false)); // Set initial loading to false after the first load
+      dispatch(getUserTasks()).finally(() => setInitialLoading(false));
     }
   }, [isAuthenticated, dispatch]);
 
@@ -24,15 +23,12 @@ const TaskList = () => {
     dispatch(deleteTask(id));
   };
 
-  // Only show loader during initial load
+  const filteredTasks = tasks?.filter(task => task.completed === showCompleted);
+
   if (initialLoading) {
     return (
       <div className="w-full flex flex-col justify-center items-center max-w-[1280px] mx-auto">
-        <img
-          src={loader}
-          alt="loader"
-          className="w-[100px] h-[100px] object-contain"
-        />
+        <img src={loader} alt="loader" className="w-[100px] h-[100px] object-contain" />
         <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left">
           Carregando...
         </p>
@@ -40,32 +36,14 @@ const TaskList = () => {
     );
   }
 
-  // Error state
   if (error) {
     return <p>Error: {error}</p>;
   }
 
-  // // Display empty state if tasks array is empty after initial load
-  // if (!tasks || tasks.length === 0) {
-  //   return (
-  //     <div className="w-full flex flex-col justify-center items-center max-w-[1280px] mx-auto">
-  //       <img
-  //         src={noresults}
-  //         alt="no results"
-  //         className="w-[100px] h-[100px] object-contain pb-4"
-  //       />
-  //       <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left pb-1">
-  //         Nenhuma tarefa encontrada.
-  //       </p>
-  //     </div>
-  //   );
-  // }
-
-  // Render tasks if they exist
   return (
     <div className="w-full flex flex-col items-center max-w-[1280px] mx-auto">
-      {tasks && tasks.length > 0 ? (
-        tasks.map((task) => (
+      {filteredTasks && filteredTasks.length > 0 ? (
+        filteredTasks.map((task) => (
           <TaskItem
             key={task._id}
             task={task}
@@ -75,11 +53,7 @@ const TaskList = () => {
         ))
       ) : (
         <div className="flex flex-col items-center">
-          <img
-            src={noresults}
-            alt="no results"
-            className="w-[100px] h-[100px] object-contain pb-4"
-          />
+          <img src={noresults} alt="no results" className="w-[100px] h-[100px] object-contain pb-4" />
           <p className="font-epilogue font-bold text-[18px] text-[#3F3D56] text-left pb-1">
             Nenhuma tarefa encontrada.
           </p>
