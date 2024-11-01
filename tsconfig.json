@@ -2,7 +2,14 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
-    }
-  }
+      "@/*": ["src/*"]
+    },
+    "outDir": "./dist", // Optional, specifies where compiled files will go
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "jsx": "react-jsx" // if you're using React
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

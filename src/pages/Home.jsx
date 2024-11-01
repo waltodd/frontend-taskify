@@ -22,17 +22,24 @@ const Home = () => {
   const { tasks, isAuthenticated, isLoading, error, user } = useSelector(
     (state) => state.auth
   );
-  const username = user?.name;
+
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (isAuthenticated) {
-      dispatch(getCurrentUser());
-      dispatch(getUserTasks()); 
-    }
-  }, [isAuthenticated,dispatch]);
-  // Filter tasks that belong to the current user
+  
 
+// Check for loading state and user information
+useEffect(() => {
+  if (isAuthenticated) {
+    dispatch(getCurrentUser()).then(() => {
+      dispatch(getUserTasks());
+    });
+  }else {
+    // Redirect to sign-in page if the user is not authenticated
+    navigate("/sign-in"); // Change this to your actual sign-in route
+  }
+}, [isAuthenticated, dispatch, navigate]);
+
+const username = user?.name // Fallback if username is not available
 
   return (
     <div className="flex flex-col mt-8">
@@ -40,15 +47,7 @@ const Home = () => {
         Bem-vindo, <span className="text-[#1dc071]">{username}.</span>
       </h1>
 
-      <div className="flex flex-wrap mt-[20px] gap-[26px]">
-        <p className="font-epilogue font-semibold text-[14px] leading-[30px] text-[#818183]">
-          Tem{" "}
-          <strong className="font-epilogue font-bold text-[16px] text-[#1dc071]">
-            {tasks?.length || "0"}
-          </strong>{" "}
-          tarefas para fazer.
-        </p>
-      </div>
+      
       <div className="flex flex-row justify-between items-center ">
         <div className="py-4">
           <Link
@@ -66,14 +65,14 @@ const Home = () => {
             </p>
           </Link>
         </div>
-        <div className="flex flex-row justify-end items-center">
+        {/* <div className="flex flex-row justify-end items-center">
         <div className="pl-2">
             FIltro prioridade
           </div>
           <div className="pl-2">
              FIltro completed
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="mt-4">
